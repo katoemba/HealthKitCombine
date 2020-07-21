@@ -25,7 +25,7 @@
 		OBJ_27 /* TrWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* TrWorkout.swift */; };
 		OBJ_28 /* TrWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* TrWorkoutModel.swift */; };
 		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_46 /* TrWorkoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* TrWorkoutTests.swift */; };
+		OBJ_46 /* TrWorkoutModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* TrWorkoutModelTests.swift */; };
 		OBJ_47 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* XCTestManifests.swift */; };
 		OBJ_49 /* TrWorkout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TrWorkout::TrWorkout::Product" /* TrWorkout.framework */; };
 /* End PBXBuildFile section */
@@ -50,7 +50,7 @@
 /* Begin PBXFileReference section */
 		OBJ_10 /* TrWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkout.swift; sourceTree = "<group>"; };
 		OBJ_11 /* TrWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkoutModel.swift; sourceTree = "<group>"; };
-		OBJ_14 /* TrWorkoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkoutTests.swift; sourceTree = "<group>"; };
+		OBJ_14 /* TrWorkoutModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkoutModelTests.swift; sourceTree = "<group>"; };
 		OBJ_15 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_19 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		OBJ_20 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 		OBJ_13 /* TrWorkoutTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_14 /* TrWorkoutTests.swift */,
+				OBJ_14 /* TrWorkoutModelTests.swift */,
 				OBJ_15 /* XCTestManifests.swift */,
 			);
 			name = TrWorkoutTests;
@@ -240,7 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_46 /* TrWorkoutTests.swift in Sources */,
+				OBJ_46 /* TrWorkoutModelTests.swift in Sources */,
 				OBJ_47 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
