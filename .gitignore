@@ -92,5 +92,7 @@ iOSInjectionProject/
 .DS_Store
 /.build
 /Packages
-/*.xcodeproj
+# /*.xcodeproj
 xcuserdata/
+TrWorkout.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+TrWorkout.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
