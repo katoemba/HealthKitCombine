@@ -21,6 +21,9 @@ public class TrWorkout: Identifiable, ObservableObject {
     }
     public let workout: HKWorkout
     @Published public var state = State.new
+    @Published public var name = ""
+    @Published public var description = ""
+    @Published public var commute = false
     public var type: String {
         switch workout.workoutActivityType {
         case .running:
