@@ -11,8 +11,8 @@ import HealthKit
 import CoreLocation
 import Combine
 
-/// Relevant data from a HKWorkout
-public struct TrWorkoutDetails {
+/// Relevant data from a HKWorkout including samples
+public struct WorkoutDetails {
     /// The actual workout
     public let workout: HKWorkout
     /// A sorted array of location samples, across all HKWorkoutRoutes that are part of the workout
@@ -21,7 +21,7 @@ public struct TrWorkoutDetails {
     public let heartRateSamples: [HKQuantitySample]
 }
 
-public struct TrHealthkitError: Error {
+public struct HealthKitCombineError: Error {
     public enum ErrorKind {
         case notAvailableOnDevice
         case dataTypeNotAvailable
@@ -31,9 +31,14 @@ public struct TrHealthkitError: Error {
     
     public let kind: ErrorKind
     public let errorCode: String
+    
+    public init(kind: ErrorKind, errorCode: String) {
+        self.kind = kind
+        self.errorCode = errorCode
+    }
 }
 
-extension TrHealthkitError: LocalizedError {
+extension HealthKitCombineError: LocalizedError {
     public var errorDescription: String? {
         switch self.kind {
         case .notAvailableOnDevice:
@@ -48,8 +53,15 @@ extension TrHealthkitError: LocalizedError {
     }
 }
 
-public extension HKHealthStore {
-    func authorize() -> AnyPublisher<Bool, Error> {
+public protocol HKHealthStoreCombine {
+    func authorize() -> AnyPublisher<Bool, Error>
+    func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error>
+    func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error>
+    func workout(_ id: UUID) -> AnyPublisher<HKWorkout, Error>
+}
+
+extension HKHealthStore: HKHealthStoreCombine {
+    public func authorize() -> AnyPublisher<Bool, Error> {
         let subject = PassthroughSubject<Bool, Error>()
         let callback: (Bool, Error?) -> Swift.Void = {
             result, error in
@@ -63,7 +75,7 @@ public extension HKHealthStore {
         }
         
         if !HKHealthStore.isHealthDataAvailable() {
-             callback(false, TrHealthkitError.init(kind: .notAvailableOnDevice, errorCode: "Not available on device"))
+             callback(false, HealthKitCombineError.init(kind: .notAvailableOnDevice, errorCode: "Not available on device"))
          }
          else {
              var healthKitTypesToRead: Set<HKObjectType> = [HKObjectType.workoutType(),
@@ -81,7 +93,7 @@ public extension HKHealthStore {
         return subject.eraseToAnyPublisher()
     }
     
-    func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error> {
+    public func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error> {
         let subject = PassthroughSubject<[HKWorkout], Error>()
         
         let workoutPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [HKQuery.predicateForWorkouts(with: .running),
@@ -104,7 +116,7 @@ public extension HKHealthStore {
                                             return
                                         }
                                         guard let workouts = samples as? [HKWorkout] else {
-                                            subject.send(completion: .failure(TrHealthkitError.init(kind: .noDataFound, errorCode: "No workouts found")))
+                                            subject.send(completion: .failure(HealthKitCombineError.init(kind: .noDataFound, errorCode: "No workouts found")))
                                             return
                                         }
 
@@ -117,11 +129,61 @@ public extension HKHealthStore {
         
         return subject.eraseToAnyPublisher()
     }
+        
+    private func workoutsSubject(_ ids: [UUID]) -> PassthroughSubject<[HKWorkout], Error> {
+        let subject = PassthroughSubject<[HKWorkout], Error>()
+        
+        let workoutPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [HKQuery.predicateForObjects(with: Set(ids))])
+
+        let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
+                                  predicate: workoutPredicate,
+                                  limit: 0,
+                                  sortDescriptors: []) { (query, samples, error) in
+                                    DispatchQueue.main.async {
+                                        guard error == nil else {
+                                            subject.send(completion: .failure(error!))
+                                            return
+                                        }
+                                        guard let workouts = samples as? [HKWorkout], workouts.count > 0 else {
+                                            subject.send(completion: .failure(HealthKitCombineError.init(kind: .noDataFound, errorCode: "No workouts found")))
+                                            return
+                                        }
+
+                                        subject.send(workouts)
+                                        subject.send(completion: .finished)
+                                    }
+        }
+
+        self.execute(query)
+        
+        return subject
+    }
+
+    public func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error> {
+        workoutsSubject(ids)
+            .eraseToAnyPublisher()
+    }
+
+    public func workout(_ id: UUID) -> AnyPublisher<HKWorkout, Error> {
+        workoutsSubject([id])
+            .filter({ (workouts) -> Bool in
+                workouts.count > 0
+            })
+            .tryMap({ (workouts) -> HKWorkout in
+                guard workouts.count > 0 else { throw HealthKitCombineError(kind: .noDataFound, errorCode: "Workout with id \(id) not found") }
+                return workouts[0]
+            })
+            .eraseToAnyPublisher()
+    }
 }
 
-public extension HKWorkout {
+public protocol HKWorkoutCombine {
+    var workoutWithDetails: AnyPublisher<WorkoutDetails, Error> { get }
+}
+
+extension HKWorkout: HKWorkoutCombine {
     /// Get a workout together with workout route samples
-    var workoutWithDetails: AnyPublisher<TrWorkoutDetails, Error> {
+    public var workoutWithDetails: AnyPublisher<WorkoutDetails, Error> {
         let locationSamplesPublisher = workoutRouteSubject
             .flatMap({ (workoutRoute) -> PassthroughSubject<[CLLocation], Error> in
                 workoutRoute.locationsSubject
@@ -137,8 +199,8 @@ public extension HKWorkout {
             })
             
         return Publishers.CombineLatest(locationSamplesPublisher, heartRateSampleSubject)
-            .map({ (locationSamples, heartRateSamples) -> TrWorkoutDetails in
-                TrWorkoutDetails(workout: self,
+            .map({ (locationSamples, heartRateSamples) -> WorkoutDetails in
+                WorkoutDetails(workout: self,
                                  locationSamples: locationSamples,
                                  heartRateSamples: heartRateSamples)
             })
@@ -206,7 +268,7 @@ private extension HKWorkoutRoute {
                 return
             }
             guard let locations = locations else {
-                subject.send(completion: .failure(TrHealthkitError.init(kind: .noRoutePointsFound, errorCode: "No routepoints found")))
+                subject.send(completion: .failure(HealthKitCombineError.init(kind: .noRoutePointsFound, errorCode: "No routepoints found")))
                 return
             }
             

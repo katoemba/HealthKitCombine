@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		"TrWorkout::TrWorkoutPackageTests::ProductTarget" /* TrWorkoutPackageTests */ = {
+		"TrWorkout::TrWorkoutPackageTests::ProductTarget" /* HealthKitCombinePackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_37 /* Build configuration list for PBXAggregateTarget "TrWorkoutPackageTests" */;
+			buildConfigurationList = OBJ_37 /* Build configuration list for PBXAggregateTarget "HealthKitCombinePackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
 				OBJ_40 /* PBXTargetDependency */,
 			);
-			name = TrWorkoutPackageTests;
+			name = HealthKitCombinePackageTests;
 			productName = TrWorkoutPackageTests;
 		};
 /* End PBXAggregateTarget section */
@@ -27,7 +27,7 @@
 		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_46 /* TrWorkoutModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* TrWorkoutModelTests.swift */; };
 		OBJ_47 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* XCTestManifests.swift */; };
-		OBJ_49 /* TrWorkout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TrWorkout::TrWorkout::Product" /* TrWorkout.framework */; };
+		OBJ_49 /* HealthKitCombine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,8 +56,8 @@
 		OBJ_20 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* TrHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrHealthKit.swift; sourceTree = "<group>"; };
-		"TrWorkout::TrWorkout::Product" /* TrWorkout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TrWorkout.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"TrWorkout::TrWorkoutTests::Product" /* TrWorkoutTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = TrWorkoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HealthKitCombine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		"TrWorkout::TrWorkoutTests::Product" /* HealthKitCombineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = HealthKitCombineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_49 /* TrWorkout.framework in Frameworks */,
+				OBJ_49 /* HealthKitCombine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,31 +82,31 @@
 		OBJ_12 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_13 /* TrWorkoutTests */,
+				OBJ_13 /* HealthKitCombineTests */,
 			);
 			name = Tests;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_13 /* TrWorkoutTests */ = {
+		OBJ_13 /* HealthKitCombineTests */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_14 /* TrWorkoutModelTests.swift */,
 				OBJ_15 /* XCTestManifests.swift */,
 			);
-			name = TrWorkoutTests;
-			path = Tests/TrWorkoutTests;
+			name = HealthKitCombineTests;
+			path = Tests/HealthKitCombineTests;
 			sourceTree = SOURCE_ROOT;
 		};
 		OBJ_16 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				"TrWorkout::TrWorkoutTests::Product" /* TrWorkoutTests.xctest */,
-				"TrWorkout::TrWorkout::Product" /* TrWorkout.framework */,
+				"TrWorkout::TrWorkoutTests::Product" /* HealthKitCombineTests.xctest */,
+				"TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */,
 			);
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -116,34 +116,33 @@
 				OBJ_19 /* LICENSE */,
 				OBJ_20 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_8 /* TrWorkout */,
+				OBJ_8 /* HealthKitCombine */,
 			);
 			name = Sources;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_8 /* TrWorkout */ = {
+		OBJ_8 /* HealthKitCombine */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_9 /* TrHealthKit.swift */,
 				OBJ_10 /* TrWorkout.swift */,
 				OBJ_11 /* TrWorkoutModel.swift */,
 			);
-			name = TrWorkout;
-			path = Sources/TrWorkout;
+			name = HealthKitCombine;
+			path = Sources/HealthKitCombine;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		"TrWorkout::SwiftPMPackageDescription" /* TrWorkoutPackageDescription */ = {
+		"TrWorkout::SwiftPMPackageDescription" /* HealthKitCombinePackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_31 /* Build configuration list for PBXNativeTarget "TrWorkoutPackageDescription" */;
+			buildConfigurationList = OBJ_31 /* Build configuration list for PBXNativeTarget "HealthKitCombinePackageDescription" */;
 			buildPhases = (
 				OBJ_34 /* Sources */,
 			);
@@ -151,13 +150,13 @@
 			);
 			dependencies = (
 			);
-			name = TrWorkoutPackageDescription;
+			name = HealthKitCombinePackageDescription;
 			productName = TrWorkoutPackageDescription;
 			productType = "com.apple.product-type.framework";
 		};
-		"TrWorkout::TrWorkout" /* TrWorkout */ = {
+		"TrWorkout::TrWorkout" /* HealthKitCombine */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_22 /* Build configuration list for PBXNativeTarget "TrWorkout" */;
+			buildConfigurationList = OBJ_22 /* Build configuration list for PBXNativeTarget "HealthKitCombine" */;
 			buildPhases = (
 				OBJ_25 /* Sources */,
 				OBJ_29 /* Frameworks */,
@@ -166,14 +165,14 @@
 			);
 			dependencies = (
 			);
-			name = TrWorkout;
+			name = HealthKitCombine;
 			productName = TrWorkout;
-			productReference = "TrWorkout::TrWorkout::Product" /* TrWorkout.framework */;
+			productReference = "TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		"TrWorkout::TrWorkoutTests" /* TrWorkoutTests */ = {
+		"TrWorkout::TrWorkoutTests" /* HealthKitCombineTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_42 /* Build configuration list for PBXNativeTarget "TrWorkoutTests" */;
+			buildConfigurationList = OBJ_42 /* Build configuration list for PBXNativeTarget "HealthKitCombineTests" */;
 			buildPhases = (
 				OBJ_45 /* Sources */,
 				OBJ_48 /* Frameworks */,
@@ -183,9 +182,9 @@
 			dependencies = (
 				OBJ_50 /* PBXTargetDependency */,
 			);
-			name = TrWorkoutTests;
+			name = HealthKitCombineTests;
 			productName = TrWorkoutTests;
-			productReference = "TrWorkout::TrWorkoutTests::Product" /* TrWorkoutTests.xctest */;
+			productReference = "TrWorkout::TrWorkoutTests::Product" /* HealthKitCombineTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -197,22 +196,22 @@
 				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 9999;
 			};
-			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "TrWorkout" */;
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "HealthKitCombine" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_16 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"TrWorkout::TrWorkout" /* TrWorkout */,
-				"TrWorkout::SwiftPMPackageDescription" /* TrWorkoutPackageDescription */,
-				"TrWorkout::TrWorkoutPackageTests::ProductTarget" /* TrWorkoutPackageTests */,
-				"TrWorkout::TrWorkoutTests" /* TrWorkoutTests */,
+				"TrWorkout::TrWorkout" /* HealthKitCombine */,
+				"TrWorkout::SwiftPMPackageDescription" /* HealthKitCombinePackageDescription */,
+				"TrWorkout::TrWorkoutPackageTests::ProductTarget" /* HealthKitCombinePackageTests */,
+				"TrWorkout::TrWorkoutTests" /* HealthKitCombineTests */,
 			);
 		};
 /* End PBXProject section */
@@ -250,12 +249,12 @@
 /* Begin PBXTargetDependency section */
 		OBJ_40 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = "TrWorkout::TrWorkoutTests" /* TrWorkoutTests */;
+			target = "TrWorkout::TrWorkoutTests" /* HealthKitCombineTests */;
 			targetProxy = C562135824C629A6004A0FBA /* PBXContainerItemProxy */;
 		};
 		OBJ_50 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = "TrWorkout::TrWorkout" /* TrWorkout */;
+			target = "TrWorkout::TrWorkout" /* HealthKitCombine */;
 			targetProxy = C562135724C629A5004A0FBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -270,20 +269,20 @@
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = TrWorkout.xcodeproj/TrWorkout_Info.plist;
+				INFOPLIST_FILE = HealthKitCombine.xcodeproj/HealthKitCombine_Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = TrWorkout;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katoemba.HealthKitCombine;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = HealthKitCombine;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
-				TARGET_NAME = TrWorkout;
+				TARGET_NAME = HealthKitCombine;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
@@ -298,20 +297,20 @@
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = TrWorkout.xcodeproj/TrWorkout_Info.plist;
+				INFOPLIST_FILE = HealthKitCombine.xcodeproj/HealthKitCombine_Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = TrWorkout;
+				PRODUCT_BUNDLE_IDENTIFIER = com.katoemba.HealthKitCombine;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = HealthKitCombine;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
-				TARGET_NAME = TrWorkout;
+				TARGET_NAME = HealthKitCombine;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
@@ -350,6 +349,7 @@
 			buildSettings = {
 				LD = /usr/bin/true;
 				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.2.0";
+				PRODUCT_NAME = HealthKitCombinePackageDescription;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -359,6 +359,7 @@
 			buildSettings = {
 				LD = /usr/bin/true;
 				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.2.0";
+				PRODUCT_NAME = HealthKitCombinePackageDescription;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -366,12 +367,14 @@
 		OBJ_38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = HealthKitCombinePackageTests;
 			};
 			name = Debug;
 		};
 		OBJ_39 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = HealthKitCombinePackageTests;
 			};
 			name = Release;
 		};
@@ -410,16 +413,17 @@
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = TrWorkout.xcodeproj/TrWorkoutTests_Info.plist;
+				INFOPLIST_FILE = HealthKitCombine.xcodeproj/HealthKitCombineTests_Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_NAME = HealthKitCombineTests;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
-				TARGET_NAME = TrWorkoutTests;
+				TARGET_NAME = HealthKitCombineTests;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
@@ -435,16 +439,17 @@
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = TrWorkout.xcodeproj/TrWorkoutTests_Info.plist;
+				INFOPLIST_FILE = HealthKitCombine.xcodeproj/HealthKitCombineTests_Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_NAME = HealthKitCombineTests;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
 				SWIFT_VERSION = 5.0;
-				TARGET_NAME = TrWorkoutTests;
+				TARGET_NAME = HealthKitCombineTests;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 			};
@@ -453,7 +458,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		OBJ_2 /* Build configuration list for PBXProject "TrWorkout" */ = {
+		OBJ_2 /* Build configuration list for PBXProject "HealthKitCombine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_3 /* Debug */,
@@ -462,7 +467,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_22 /* Build configuration list for PBXNativeTarget "TrWorkout" */ = {
+		OBJ_22 /* Build configuration list for PBXNativeTarget "HealthKitCombine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_23 /* Debug */,
@@ -471,7 +476,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_31 /* Build configuration list for PBXNativeTarget "TrWorkoutPackageDescription" */ = {
+		OBJ_31 /* Build configuration list for PBXNativeTarget "HealthKitCombinePackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_32 /* Debug */,
@@ -480,7 +485,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_37 /* Build configuration list for PBXAggregateTarget "TrWorkoutPackageTests" */ = {
+		OBJ_37 /* Build configuration list for PBXAggregateTarget "HealthKitCombinePackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_38 /* Debug */,
@@ -489,7 +494,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		OBJ_42 /* Build configuration list for PBXNativeTarget "TrWorkoutTests" */ = {
+		OBJ_42 /* Build configuration list for PBXNativeTarget "HealthKitCombineTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				OBJ_43 /* Debug */,

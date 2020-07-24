@@ -1,7 +1,7 @@
 import XCTest
 
-import TrWorkoutTests
+import HealthKitCombineTests
 
 var tests = [XCTestCaseEntry]()
-tests += TrWorkoutTests.allTests()
+tests += HealthKitCombineTests.allTests()
 XCTMain(tests)

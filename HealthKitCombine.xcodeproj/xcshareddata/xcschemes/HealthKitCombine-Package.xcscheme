@@ -15,9 +15,23 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TrWorkout::TrWorkout"
-               BuildableName = "TrWorkout.framework"
-               BlueprintName = "TrWorkout"
-               ReferencedContainer = "container:TrWorkout.xcodeproj">
+               BuildableName = "HealthKitCombine.framework"
+               BlueprintName = "HealthKitCombine"
+               ReferencedContainer = "container:HealthKitCombine.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "TrWorkout::TrWorkoutTests"
+               BuildableName = "HealthKitCombineTests.xctest"
+               BlueprintName = "HealthKitCombineTests"
+               ReferencedContainer = "container:HealthKitCombine.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,9 +49,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "TrWorkout::TrWorkoutTests"
-               BuildableName = "TrWorkoutTests.xctest"
-               BlueprintName = "TrWorkoutTests"
-               ReferencedContainer = "container:TrWorkout.xcodeproj">
+               BuildableName = "HealthKitCombineTests.xctest"
+               BlueprintName = "HealthKitCombineTests"
+               ReferencedContainer = "container:HealthKitCombine.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -59,6 +73,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "TrWorkout::TrWorkout"
+            BuildableName = "HealthKitCombine.framework"
+            BlueprintName = "HealthKitCombine"
+            ReferencedContainer = "container:HealthKitCombine.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
