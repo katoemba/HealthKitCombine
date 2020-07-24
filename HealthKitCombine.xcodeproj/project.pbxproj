@@ -21,11 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_26 /* TrHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* TrHealthKit.swift */; };
-		OBJ_27 /* TrWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* TrWorkout.swift */; };
-		OBJ_28 /* TrWorkoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* TrWorkoutModel.swift */; };
+		OBJ_26 /* HealthKitCombine.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* HealthKitCombine.swift */; };
 		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_46 /* TrWorkoutModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* TrWorkoutModelTests.swift */; };
+		OBJ_46 /* HealthKitCombineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* HealthKitCombineTests.swift */; };
 		OBJ_47 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* XCTestManifests.swift */; };
 		OBJ_49 /* HealthKitCombine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */; };
 /* End PBXBuildFile section */
@@ -48,14 +46,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		OBJ_10 /* TrWorkout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkout.swift; sourceTree = "<group>"; };
-		OBJ_11 /* TrWorkoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkoutModel.swift; sourceTree = "<group>"; };
-		OBJ_14 /* TrWorkoutModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrWorkoutModelTests.swift; sourceTree = "<group>"; };
+		OBJ_14 /* HealthKitCombineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitCombineTests.swift; sourceTree = "<group>"; };
 		OBJ_15 /* XCTestManifests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		OBJ_19 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		OBJ_20 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_9 /* TrHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrHealthKit.swift; sourceTree = "<group>"; };
+		OBJ_9 /* HealthKitCombine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitCombine.swift; sourceTree = "<group>"; };
 		"TrWorkout::TrWorkout::Product" /* HealthKitCombine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HealthKitCombine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"TrWorkout::TrWorkoutTests::Product" /* HealthKitCombineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = HealthKitCombineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -90,7 +86,7 @@
 		OBJ_13 /* HealthKitCombineTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_14 /* TrWorkoutModelTests.swift */,
+				OBJ_14 /* HealthKitCombineTests.swift */,
 				OBJ_15 /* XCTestManifests.swift */,
 			);
 			name = HealthKitCombineTests;
@@ -129,9 +125,7 @@
 		OBJ_8 /* HealthKitCombine */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* TrHealthKit.swift */,
-				OBJ_10 /* TrWorkout.swift */,
-				OBJ_11 /* TrWorkoutModel.swift */,
+				OBJ_9 /* HealthKitCombine.swift */,
 			);
 			name = HealthKitCombine;
 			path = Sources/HealthKitCombine;
@@ -221,9 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_26 /* TrHealthKit.swift in Sources */,
-				OBJ_27 /* TrWorkout.swift in Sources */,
-				OBJ_28 /* TrWorkoutModel.swift in Sources */,
+				OBJ_26 /* HealthKitCombine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_46 /* TrWorkoutModelTests.swift in Sources */,
+				OBJ_46 /* HealthKitCombineTests.swift in Sources */,
 				OBJ_47 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
