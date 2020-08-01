@@ -19,6 +19,12 @@ public struct WorkoutDetails {
     public let locationSamples: [CLLocation]
     /// A sorted array of heartrate samples taken during the workout
     public let heartRateSamples: [HKQuantitySample]
+    
+    public init(workout: HKWorkout, locationSamples: [CLLocation], heartRateSamples: [HKQuantitySample]) {
+        self.workout = workout
+        self.locationSamples = locationSamples
+        self.heartRateSamples = heartRateSamples
+    }
 }
 
 public struct HealthKitCombineError: Error {
