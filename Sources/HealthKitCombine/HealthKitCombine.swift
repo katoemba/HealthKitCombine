@@ -64,6 +64,7 @@ public protocol HKHealthStoreCombine {
     func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error>
     func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error>
     func workout(_ id: UUID) -> AnyPublisher<HKWorkout, Error>
+    func workoutDetails(_ workout: HKWorkout) -> AnyPublisher<WorkoutDetails, Error>
 }
 
 extension HKHealthStore: HKHealthStoreCombine {
@@ -181,13 +182,13 @@ extension HKHealthStore: HKHealthStoreCombine {
             })
             .eraseToAnyPublisher()
     }
+    
+    public func workoutDetails(_ workout: HKWorkout) -> AnyPublisher<WorkoutDetails, Error> {
+        return workout.workoutWithDetails
+    }
 }
 
-public protocol HKWorkoutCombine {
-    var workoutWithDetails: AnyPublisher<WorkoutDetails, Error> { get }
-}
-
-extension HKWorkout: HKWorkoutCombine {
+extension HKWorkout {
     /// Get a workout together with workout route samples
     public var workoutWithDetails: AnyPublisher<WorkoutDetails, Error> {
         let locationSamplesPublisher = workoutRouteSubject
