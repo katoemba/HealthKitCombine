@@ -60,6 +60,7 @@ extension HealthKitCombineError: LocalizedError {
 }
 
 public protocol HKHealthStoreCombine {
+    func shouldAuthorize() -> AnyPublisher<Bool, Error>
     func authorize() -> AnyPublisher<Bool, Error>
     func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error>
     func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error>
@@ -68,6 +69,38 @@ public protocol HKHealthStoreCombine {
 }
 
 extension HKHealthStore: HKHealthStoreCombine {
+    public func shouldAuthorize() -> AnyPublisher<Bool, Error> {
+        let subject = PassthroughSubject<Bool, Error>()
+        let callback: (HKAuthorizationRequestStatus, Error?) -> Swift.Void = {
+            result, error in
+            if let error = error {
+                subject.send(completion: .failure(error))
+            }
+            else {
+                subject.send(result == .shouldRequest)
+                subject.send(completion: .finished)
+            }
+        }
+        
+        if !HKHealthStore.isHealthDataAvailable() {
+            callback(.unknown, HealthKitCombineError.init(kind: .notAvailableOnDevice, errorCode: "Not available on device"))
+        }
+        else {
+            var healthKitTypesToRead: Set<HKObjectType> = [HKObjectType.workoutType(),
+                                                           HKSeriesType.workoutRoute()]
+            if let heartRateQuantityType = HKQuantityType.quantityType(forIdentifier: .heartRate) {
+                healthKitTypesToRead.insert(heartRateQuantityType)
+            }
+            
+            self.getRequestStatusForAuthorization(toShare: Set<HKSampleType>(),
+                                                  read: healthKitTypesToRead) { (result, error) in
+                                                    callback(result, error)
+            }
+        }
+        
+        return subject.eraseToAnyPublisher()
+    }
+    
     public func authorize() -> AnyPublisher<Bool, Error> {
         let subject = PassthroughSubject<Bool, Error>()
         let callback: (Bool, Error?) -> Swift.Void = {
@@ -82,21 +115,21 @@ extension HKHealthStore: HKHealthStoreCombine {
         }
         
         if !HKHealthStore.isHealthDataAvailable() {
-             callback(false, HealthKitCombineError.init(kind: .notAvailableOnDevice, errorCode: "Not available on device"))
-         }
-         else {
-             var healthKitTypesToRead: Set<HKObjectType> = [HKObjectType.workoutType(),
-                                                            HKSeriesType.workoutRoute()]
-             if let heartRateQuantityType = HKQuantityType.quantityType(forIdentifier: .heartRate) {
-                 healthKitTypesToRead.insert(heartRateQuantityType)
-             }
-
-             self.requestAuthorization(toShare: nil,
-                                                     read: healthKitTypesToRead) { (result, error) in
-                                                         callback(result, error)
-             }
-         }
+            callback(false, HealthKitCombineError.init(kind: .notAvailableOnDevice, errorCode: "Not available on device"))
+        }
+        else {
+            var healthKitTypesToRead: Set<HKObjectType> = [HKObjectType.workoutType(),
+                                                           HKSeriesType.workoutRoute()]
+            if let heartRateQuantityType = HKQuantityType.quantityType(forIdentifier: .heartRate) {
+                healthKitTypesToRead.insert(heartRateQuantityType)
+            }
             
+            self.requestAuthorization(toShare: nil,
+                                      read: healthKitTypesToRead) { (result, error) in
+                                        callback(result, error)
+            }
+        }
+        
         return subject.eraseToAnyPublisher()
     }
     
@@ -109,10 +142,10 @@ extension HKHealthStore: HKHealthStoreCombine {
                                                                                   HKQuery.predicateForWorkouts(with: .swimming),
                                                                                   HKQuery.predicateForWorkouts(with: .walking),
                                                                                   HKQuery.predicateForWorkouts(with: .rowing)])
-
+        
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
                                               ascending: false)
-
+        
         let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
                                   predicate: workoutPredicate,
                                   limit: limit,
@@ -126,22 +159,22 @@ extension HKHealthStore: HKHealthStoreCombine {
                                             subject.send(completion: .failure(HealthKitCombineError.init(kind: .noDataFound, errorCode: "No workouts found")))
                                             return
                                         }
-
+                                        
                                         subject.send(workouts)
                                         subject.send(completion: .finished)
                                     }
         }
-
+        
         self.execute(query)
         
         return subject.eraseToAnyPublisher()
     }
-        
+    
     private func workoutsSubject(_ ids: [UUID]) -> PassthroughSubject<[HKWorkout], Error> {
         let subject = PassthroughSubject<[HKWorkout], Error>()
         
         let workoutPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [HKQuery.predicateForObjects(with: Set(ids))])
-
+        
         let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
                                   predicate: workoutPredicate,
                                   limit: 0,
@@ -155,22 +188,22 @@ extension HKHealthStore: HKHealthStoreCombine {
                                             subject.send(completion: .failure(HealthKitCombineError.init(kind: .noDataFound, errorCode: "No workouts found")))
                                             return
                                         }
-
+                                        
                                         subject.send(workouts)
                                         subject.send(completion: .finished)
                                     }
         }
-
+        
         self.execute(query)
         
         return subject
     }
-
+    
     public func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error> {
         workoutsSubject(ids)
             .eraseToAnyPublisher()
     }
-
+    
     public func workout(_ id: UUID) -> AnyPublisher<HKWorkout, Error> {
         workoutsSubject([id])
             .filter({ (workouts) -> Bool in
@@ -204,30 +237,30 @@ extension HKWorkout {
                     loc1.timestamp <= loc2.timestamp
                 })
             })
-            
+        
         return Publishers.CombineLatest(locationSamplesPublisher, heartRateSampleSubject)
             .map({ (locationSamples, heartRateSamples) -> WorkoutDetails in
                 WorkoutDetails(workout: self,
-                                 locationSamples: locationSamples,
-                                 heartRateSamples: heartRateSamples)
+                               locationSamples: locationSamples,
+                               heartRateSamples: heartRateSamples)
             })
             .eraseToAnyPublisher()
     }
-
+    
     private var workoutRouteSubject: PassthroughSubject<HKWorkoutRoute, Error> {
         let subject = PassthroughSubject<HKWorkoutRoute, Error>()
-
+        
         let workoutPredicate = HKQuery.predicateForObjects(from: self)
         let query = HKSampleQuery(sampleType: HKSeriesType.workoutRoute(),
                                   predicate: workoutPredicate,
                                   limit: HKObjectQueryNoLimit,
                                   sortDescriptors: nil) { (query, workoutRoutes, error) in
-                                        guard let workoutRoutes = workoutRoutes as? [HKWorkoutRoute],
-                                            error == nil else {
-                                                subject.send(completion: .failure(error!))
-                                                return
-                                        }
-                                        
+                                    guard let workoutRoutes = workoutRoutes as? [HKWorkoutRoute],
+                                        error == nil else {
+                                            subject.send(completion: .failure(error!))
+                                            return
+                                    }
+                                    
                                     for workoutRoute in workoutRoutes {
                                         subject.send(workoutRoute)
                                     }
@@ -241,12 +274,12 @@ extension HKWorkout {
     
     private var heartRateSampleSubject: AnyPublisher<[HKQuantitySample], Error> {
         let subject = PassthroughSubject<[HKQuantitySample], Error>()
-
+        
         let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
         let workoutPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
                                               ascending: true)
-
+        
         let query = HKSampleQuery(sampleType: heartRateType,
                                   predicate: workoutPredicate,
                                   limit: HKObjectQueryNoLimit,
@@ -268,7 +301,7 @@ private extension HKWorkoutRoute {
     var locationsSubject: PassthroughSubject<[CLLocation], Error> {
         let subject = PassthroughSubject<[CLLocation], Error>()
         var workoutLocations = Array<CLLocation>()
-
+        
         let query = HKWorkoutRouteQuery(route: self) { (routeQuery, locations, done, error) in
             guard error == nil else {
                 subject.send(completion: .failure(error!))
