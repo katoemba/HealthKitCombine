@@ -228,6 +228,7 @@ extension HKWorkout {
             .flatMap({ (workoutRoute) -> PassthroughSubject<[CLLocation], Error> in
                 workoutRoute.locationsSubject
             })
+            .replaceEmpty(with: [])
             .scan([], { (locations, newLocations) -> [CLLocation] in
                 locations + newLocations
             })
