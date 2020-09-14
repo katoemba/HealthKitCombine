@@ -136,18 +136,11 @@ extension HKHealthStore: HKHealthStoreCombine {
     public func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error> {
         let subject = PassthroughSubject<[HKWorkout], Error>()
         
-        let workoutPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [HKQuery.predicateForWorkouts(with: .running),
-                                                                                  HKQuery.predicateForWorkouts(with: .cycling),
-                                                                                  HKQuery.predicateForWorkouts(with: .hiking),
-                                                                                  HKQuery.predicateForWorkouts(with: .swimming),
-                                                                                  HKQuery.predicateForWorkouts(with: .walking),
-                                                                                  HKQuery.predicateForWorkouts(with: .rowing)])
-        
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
                                               ascending: false)
         
         let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
-                                  predicate: workoutPredicate,
+                                  predicate: nil,
                                   limit: limit,
                                   sortDescriptors: [sortDescriptor]) { (query, samples, error) in
                                     DispatchQueue.main.async {
