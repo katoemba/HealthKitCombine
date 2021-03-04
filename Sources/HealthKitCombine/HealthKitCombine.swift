@@ -60,16 +60,24 @@ extension HealthKitCombineError: LocalizedError {
 }
 
 public protocol HKHealthStoreCombine {
+    func shouldAuthorize(includeSharePermission: Bool) -> AnyPublisher<Bool, Error>
+    func authorize(requestSharePermission: Bool) -> AnyPublisher<Bool, Error>
     func shouldAuthorize() -> AnyPublisher<Bool, Error>
     func authorize() -> AnyPublisher<Bool, Error>
     func workouts(_ limit: Int) -> AnyPublisher<[HKWorkout], Error>
     func workouts(_ ids: [UUID]) -> AnyPublisher<[HKWorkout], Error>
     func workout(_ id: UUID) -> AnyPublisher<HKWorkout, Error>
     func workoutDetails(_ workout: HKWorkout) -> AnyPublisher<WorkoutDetails, Error>
+    func startObservingNewWorkouts() -> AnyPublisher<HKWorkout, Error>
+    func stopObservingNewWorkouts()
 }
 
 extension HKHealthStore: HKHealthStoreCombine {
     public func shouldAuthorize() -> AnyPublisher<Bool, Error> {
+        shouldAuthorize(includeSharePermission: false)
+    }
+    
+    public func shouldAuthorize(includeSharePermission: Bool) -> AnyPublisher<Bool, Error> {
         let subject = PassthroughSubject<Bool, Error>()
         let callback: (HKAuthorizationRequestStatus, Error?) -> Swift.Void = {
             result, error in
@@ -91,8 +99,15 @@ extension HKHealthStore: HKHealthStoreCombine {
             if let heartRateQuantityType = HKQuantityType.quantityType(forIdentifier: .heartRate) {
                 healthKitTypesToRead.insert(heartRateQuantityType)
             }
-            
-            self.getRequestStatusForAuthorization(toShare: Set<HKSampleType>(),
+            var healthKitTypesToShare: Set<HKSampleType> = [HKObjectType.workoutType()]
+            if let activeEnergyBurnedQuantityType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) {
+                healthKitTypesToShare.insert(activeEnergyBurnedQuantityType)
+            }
+            if let distanceQuantityType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning) {
+                healthKitTypesToShare.insert(distanceQuantityType)
+            }
+
+            self.getRequestStatusForAuthorization(toShare: includeSharePermission ? healthKitTypesToShare : [],
                                                   read: healthKitTypesToRead) { (result, error) in
                                                     callback(result, error)
             }
@@ -102,6 +117,10 @@ extension HKHealthStore: HKHealthStoreCombine {
     }
     
     public func authorize() -> AnyPublisher<Bool, Error> {
+        authorize(requestSharePermission: false)
+    }
+
+    public func authorize(requestSharePermission: Bool = false) -> AnyPublisher<Bool, Error> {
         let subject = PassthroughSubject<Bool, Error>()
         let callback: (Bool, Error?) -> Swift.Void = {
             result, error in
@@ -124,7 +143,15 @@ extension HKHealthStore: HKHealthStoreCombine {
                 healthKitTypesToRead.insert(heartRateQuantityType)
             }
             
-            self.requestAuthorization(toShare: nil,
+            var healthKitTypesToShare: Set<HKSampleType> = [HKObjectType.workoutType()]
+            if let activeEnergyBurnedQuantityType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) {
+                healthKitTypesToShare.insert(activeEnergyBurnedQuantityType)
+            }
+            if let distanceQuantityType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning) {
+                healthKitTypesToShare.insert(distanceQuantityType)
+            }
+
+            self.requestAuthorization(toShare: requestSharePermission ? healthKitTypesToShare : nil,
                                       read: healthKitTypesToRead) { (result, error) in
                                         callback(result, error)
             }
@@ -211,6 +238,129 @@ extension HKHealthStore: HKHealthStoreCombine {
     
     public func workoutDetails(_ workout: HKWorkout) -> AnyPublisher<WorkoutDetails, Error> {
         return workout.workoutWithDetails
+    }
+    
+    public func startObservingNewWorkouts() -> AnyPublisher<HKWorkout, Error> {
+        let subject = PassthroughSubject<HKWorkout, Error>()
+        let type = HKObjectType.workoutType()
+        let query = HKObserverQuery(sampleType: type, predicate: nil, updateHandler: { (query, completionHandler, error) in
+            let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,
+                                                  ascending: false)
+            
+            let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
+                                      predicate: nil,
+                                      limit: 1,
+                                      sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+                                        DispatchQueue.main.async {
+                                            guard error == nil else {
+                                                subject.send(completion: .failure(error!))
+                                                completionHandler()
+                                                return
+                                            }
+                                            guard let workouts = samples as? [HKWorkout] else {
+                                                subject.send(completion: .failure(HealthKitCombineError.init(kind: .noDataFound, errorCode: "No workouts found")))
+                                                completionHandler()
+                                                return
+                                            }
+                                            
+                                            if workouts.count > 0 {
+                                                subject.send(workouts[0])
+                                            }
+                                            completionHandler()
+                                        }
+            }
+            
+            self.execute(query)
+       })
+        
+        execute(query)
+    
+        enableBackgroundDelivery(for: type,
+                                 frequency: .immediate) { (success, error) in
+            if let error = error {
+                subject.send(completion: .failure(error))
+            }
+        }
+        
+        return subject.eraseToAnyPublisher()
+    }
+    
+    public func stopObservingNewWorkouts() {
+        disableAllBackgroundDelivery { (success, error) in
+            // Do nothing
+        }
+    }
+    
+    /// Function to create a basic workout for test purposes
+    /// - Parameters:
+    ///   - activityType: type of activity, default is .running
+    ///   - start: start time of the workout
+    ///   - duration: duration of the workout in seconds
+    ///   - distance: distance of the workout in meters
+    ///   - caloriesBurned: the amount of calories burned in kilo calories
+    /// - Returns: A publisher for the created workout
+    public func createWorkout(_ activityType: HKWorkoutActivityType = .running, start: Date, duration: TimeInterval, distance: Double, caloriesBurned: Double) -> AnyPublisher<HKWorkout, Error> {
+        let subject = PassthroughSubject<HKWorkout, Error>()
+
+        let end = start.addingTimeInterval(duration)
+        let workoutConfiguration = HKWorkoutConfiguration()
+        workoutConfiguration.activityType = activityType
+        let workoutBuilder = HKWorkoutBuilder(healthStore: self,
+                                              configuration: workoutConfiguration,
+                                              device: .local())
+        
+        workoutBuilder.beginCollection(withStart: start) { (success, error) in
+            guard success else {
+                subject.send(completion: .failure(error!))
+                return
+            }
+        }
+        
+        guard let energyQuantityType = HKSampleType.quantityType(forIdentifier: .activeEnergyBurned),
+              let distanceQuantityType = HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning) else {
+            subject.send(completion: .failure(HealthKitCombineError.init(kind: .dataTypeNotAvailable, errorCode: "ActiveEnergyBurnder not available")))
+            return subject.eraseToAnyPublisher()
+        }
+        let calorieQuantity = HKQuantity(unit: .kilocalorie(),
+                                         doubleValue: caloriesBurned)
+        let distanceQuantity = HKQuantity(unit: .meter(),
+                                          doubleValue: distance)
+        let samples: [HKSample] = [HKCumulativeQuantitySample(type: energyQuantityType,
+                                                              quantity: calorieQuantity,
+                                                              start: start,
+                                                              end: end),
+                                   HKCumulativeQuantitySample(type: distanceQuantityType,
+                                                              quantity: distanceQuantity,
+                                                              start: start,
+                                                              end: end)]
+        
+        workoutBuilder.add(samples) { (success, error) in
+            guard success else {
+                subject.send(completion: .failure(error!))
+                return
+            }
+            
+            workoutBuilder.endCollection(withEnd: end) { (success, error) in
+                guard success else {
+                    subject.send(completion: .failure(error!))
+                    return
+                }
+                
+                workoutBuilder.finishWorkout { (workout, error) in
+                    if error == nil {
+                        if let workout = workout {
+                            subject.send(workout)
+                        }
+                        subject.send(completion: .finished)
+                    }
+                    else {
+                        subject.send(completion: .failure(error!))
+                    }
+                }
+            }
+        }
+        
+        return subject.eraseToAnyPublisher()
     }
 }
 
